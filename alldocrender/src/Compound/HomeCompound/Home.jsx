@@ -11,6 +11,7 @@ import XLSX from "../../Assets/docs/xlsx.xlsx";
 import XLS from "../../Assets/docs/xls.xls";
 import DOC from "../../Assets/docs/doc.doc";
 import DesignCard from "../DesginCardCompound/DesignCard";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 const Home = () => {
   const initialService = fromJS([
@@ -26,13 +27,41 @@ const Home = () => {
     { name: "DOC", type: "DOC", filePath: DOC },
   ]);
   const [docs, setDocs] = useState(initialService);
-  console.log(PNG);
+
+  const document = [
+    {
+      uri: require("../../Assets/docs/doc.doc"),
+      fileType: "doc",
+      fileName: "doc file",
+    },
+  ];
+
   return (
     <div className="container-fluid">
-      <div className="d-flex flex-wrap justify-content-center gap-4">
+      <div className="d-flex flex-wrap justify-content-center gap-4 m-5">
         {docs.map((item, index) => {
-          return <DesignCard name={item.get("name", "")} key={index} />;
+          return (
+            <DesignCard
+              name={item.get("name", "")}
+              filePath={item.get("filePath", "")}
+              key={index}
+            />
+          );
         })}
+      </div>
+      <div className="m-5">
+        <DocViewer
+          documents={document}
+          pluginRenderers={DocViewerRenderers}
+          config={{
+            header: {
+              disableHeader: false,
+              disableFileName: false,
+              retainURLParams: false,
+            },
+          }}
+          style={{ height: "100vh" }}
+        />
       </div>
     </div>
   );

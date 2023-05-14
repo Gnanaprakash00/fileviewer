@@ -64,7 +64,7 @@ const Home = () => {
       {/* NAVBAR START*/}
       <nav className="navbar navbar-light bg-light px-5 py-4">
         <div className="container-fluid">
-          <a className="navbar-brand">React File Viewer</a>
+          <a className="navbar-brand">React Files Viewer</a>
           <form className="d-flex">
             <div className="mx-3">
               <input

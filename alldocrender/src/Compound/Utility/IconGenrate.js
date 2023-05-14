@@ -41,7 +41,7 @@ const IconGenrate = (props) => {
       return <img src={XLS} alt="" style={{ width: "100px" }} />;
       break;
     case "doc":
-      return <img src={DOC} alt="" srcset="" style={{ width: "100px" }} />;
+      return <img src={DOC} alt="" style={{ width: "100px" }} />;
       break;
   }
 };

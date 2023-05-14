@@ -11,6 +11,7 @@ import XLSX from "../../Assets/docs/xlsx.xlsx";
 import XLS from "../../Assets/docs/xls.xls";
 import DOC from "../../Assets/docs/doc.doc";
 import DesignCard from "../DesginCardCompound/DesignCard";
+import { Plus } from "react-bootstrap-icons";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 const Home = () => {
@@ -26,43 +27,81 @@ const Home = () => {
     { name: "XLS", type: "XLS", filePath: XLS },
     { name: "DOC", type: "DOC", filePath: DOC },
   ]);
-  const [docs, setDocs] = useState(initialService);
 
-  const document = [
-    {
-      uri: require("../../Assets/docs/doc.doc"),
-      fileType: "doc",
-      fileName: "doc file",
-    },
-  ];
+  const [docs, setDocs] = useState(initialService);
+  const [input, setInput] = useState("");
+
+  const handleUploadFile = (e) => {
+    let file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      console.log(e.target.result);
+    };
+    console.log(reader.readAsDataURL(file));
+  };
+
+  const handlefileredItems = docs.filter((item, index) => {
+    return input.length
+      ? item.get("name", "").toLowerCase().includes(input.toLowerCase())
+      : true;
+  });
+
+  const filderListItem = handlefileredItems.map((item, index) => {
+    return (
+      <DesignCard
+        name={item.get("name", "")}
+        filePath={item.get("filePath", "")}
+        key={index}
+        type={item.get("type", "")}
+      />
+    );
+  });
+
+  const prakash = [{ uri: PPT, fileType: "ppt", fileName: "demo" }];
 
   return (
-    <div className="container-fluid">
-      <div className="d-flex flex-wrap justify-content-center gap-4 m-5">
-        {docs.map((item, index) => {
-          return (
-            <DesignCard
-              name={item.get("name", "")}
-              filePath={item.get("filePath", "")}
-              key={index}
-            />
-          );
-        })}
+    <div className="container-fulid">
+      {/* NAVBAR START*/}
+      <nav className="navbar navbar-light bg-light px-5 py-4">
+        <div className="container-fluid">
+          <a className="navbar-brand">React File Viewer</a>
+          <form className="d-flex">
+            <div className="mx-3">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                onChange={(e) => setInput(e.target.value)}
+              />
+            </div>
+            <div>
+              <label
+                className="btn btn-outline-success"
+                htmlFor={"icon-button-file"}
+              >
+                <Plus size={25} />
+                Upload File
+              </label>
+              <input
+                type="file"
+                id={"icon-button-file"}
+                onChange={(e) => handleUploadFile(e)}
+                style={{ display: "none" }}
+              />
+            </div>
+          </form>
+        </div>
+      </nav>
+      {/* NAVBAR END */}
+      <div className="d-flex flex-wrap justify-content-center gap-4 mt-5">
+        {filderListItem}
       </div>
-      <div className="m-5">
-        <DocViewer
-          documents={document}
-          pluginRenderers={DocViewerRenderers}
-          config={{
-            header: {
-              disableHeader: false,
-              disableFileName: false,
-              retainURLParams: false,
-            },
-          }}
-          style={{ height: "100vh" }}
-        />
-      </div>
+      <DocViewer
+        documents={prakash}
+        pluginRenderers={DocViewerRenderers}
+        style={{ height: "100vh" }}
+      />
     </div>
   );
 };
